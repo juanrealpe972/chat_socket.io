@@ -2,7 +2,7 @@ import express from "express";
 import http from "http";
 import { Server as SocketServer } from "socket.io";
 import logger from "morgan"
-// import connection from "./database/db.js";
+import connection from "./database/db.js";
 
 const app = express();
 const port = process.env.PORT ?? 3000;
@@ -81,7 +81,7 @@ io.on('connection', socket => {
 // })
 
 app.get("/", (req, res) => {
-    res.send('<h1> Hello desde get </h1>')
+    res.send('<h1> Hello server chat </h1>')
 })
 
 server.listen(port, () => {

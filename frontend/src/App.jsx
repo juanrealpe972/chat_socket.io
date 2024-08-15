@@ -46,7 +46,7 @@ function App() {
   return (
     <div className="h-screen bg-zinc-800 text-white flex items-center justify-center">
       <form onSubmit={handleSubmit} className="bg-zinc-900 p-10 flex flex-col w-2/4">
-        <h1 className="text-2xl text-center font-bold my-2">Subcoffee chat</h1>
+        <h1 className="text-2xl text-center font-bold my-2">Chat</h1>
         <br />
         {messageError && messageTouched && (
           <p className="bg-red-600 text-white">{messageError}</p>
