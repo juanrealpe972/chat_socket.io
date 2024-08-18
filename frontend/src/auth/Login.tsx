@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,11 +13,12 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Card, CardContent } from '@mui/material';
 import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import axios from "axios"
 
 const defaultTheme = createTheme();
 
 export default function Login() {
-  const [email, setEmail] = useState('');
+  const [correo, setCorreo] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -27,27 +28,46 @@ export default function Login() {
     event.preventDefault();
     setLoading(true);
     setError('');
+  
     try {
-      if(email === "" && password === ""){
-        toast.error("Por favor llena todos los campos.", { autoClose: 3000 });
+      if (correo === "" && password === "") {
+        setError("Por favor llena todos los campos.");
         setLoading(false);
-      }else if(email === ""){
-        toast.error("Ingresa un correo.");
+      } else if (correo === "") {
+        setError("Ingresa un correo.");
         setLoading(false);
-      }else if(password === ""){
-        toast.error("Ingresa una contraseña.");
+      } else if (password === "") {
+        setError("Ingresa una contraseña.");
         setLoading(false);
-      }else if(email === "juan@gmail.com" && password === "123456789") {
-        navigation("/home")
       } else {
-        toast.error('Error al iniciar sesión. Por favor, verifica tus credenciales.');
+        const response = await axios.post('http://localhost:3000/v1/login', { correo, password });
+        if (response.status === 200) {
+          const { user, token } = response.data;
+          localStorage.setItem('token', token);
+          localStorage.setItem('user', JSON.stringify(user));
+          toast.success("Inicio de sesión exitoso");
+          navigation("/login");
+        }
       }
-    } catch (err) {
-      console.error('Error de inicio de sesión:', err);
+    } catch (err: any) {
+      if (err.response) {
+        toast.error(err.response.data.message); 
+      } else {
+        toast.error('Error de inicio de sesión. Por favor, intenta nuevamente.');
+      }
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError('');
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -77,13 +97,13 @@ export default function Login() {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
+                id="correo"
                 label="Correo electrónico"
-                name="email"
+                name="correo"
                 autoComplete="email"
                 autoFocus
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={correo}
+                onChange={(e) => setCorreo(e.target.value)}
               />
               <TextField
                 margin="normal"
@@ -116,12 +136,21 @@ export default function Login() {
               </Link>
               <Card sx={{ minWidth: 275, mt: 2 }} variant="outlined">
                 <CardContent>
-                  <Typography variant="body2" color="text.secondary" align="center">
-                    {"¿No tienes una cuenta? "}
-                    <Link href="/register" variant="body2" align='center'>
-                      Regístrate
-                    </Link>
-                  </Typography>
+                  <Grid container className='justify-between items-center'>
+                    <Grid item>
+                      <Link href="/" variant="body2">
+                        Inicio
+                      </Link>
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="body2" color="text.secondary" align="center">
+                        {"¿No tienes una cuenta? "}
+                        <Link href="/register" variant="body2" align='center'>
+                        Regístrate
+                        </Link>
+                      </Typography>
+                    </Grid>
+                  </Grid>
                 </CardContent>
               </Card>
               <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 2 }}>

@@ -102,11 +102,19 @@ export default function SignUp() {
             >
               Registrarme
             </Button>
-            <Grid container justifyContent="flex-end">
+            <Grid container className='justify-between items-center'>
               <Grid item>
-                <Link href="login" variant="body2">
-                  ¿Ya tienes una cuenta? Iniciar sesión
+                <Link href="/" variant="body2">
+                  Inicio
                 </Link>
+              </Grid>
+              <Grid item>
+                <Typography variant="body2" color="text.secondary" align="center">
+                  {"¿Ya tienes una cuenta? "}
+                  <Link href="/login" variant="body2" align='center'>
+                    Iniciar sesión
+                  </Link>
+                </Typography>
               </Grid>
             </Grid>
           </Box>

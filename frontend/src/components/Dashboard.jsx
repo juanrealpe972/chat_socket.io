@@ -1,9 +1,9 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 
-import Header from "./Header";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
+import Header from "./Header";
 
 const Dashboard = () => {
     // const auth = localStorage.getItem("token");

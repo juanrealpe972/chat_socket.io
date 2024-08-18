@@ -6,20 +6,20 @@ import nodemailer from "nodemailer"
 export const validarUser = async (req, res) => {
     try {
         const { correo, password } = req.body;
-        const sql = `SELECT * FROM users WHERE email = '${correo}'`;
+        const sql = `SELECT * FROM users WHERE correo = '${correo}'`;
         const [rows] = await pool.query(sql);
         if (rows.length === 0) {
-            return res.status(404).json({ message: "Correo incorrecto" });
+            return res.status(401).json({ message: "Usuario no registrado." });
         }
         const user = rows[0]; // Obtener el primer usuario de los resultados
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) {
-            return res.status(404).json({ message: "Contraseña incorrecta" });
+            return res.status(401).json({ message: "Contraseña incorrecta" });
         }
         const token = jwt.sign({ rows }, process.env.AUT_SECRET, {
             expiresIn: process.env.AUT_EXPIRET,
         });
-        res.status(200).json({ user, token });
+        res.status(200).json({ message: "Inicio de sesión exitoso", user, token });
     } catch (error) {
         res.status(500).json({ message: "Error en el servidor" + error });
     }
@@ -46,11 +46,11 @@ export const verificarUserToken = async (req, res, next) => {
 
 export const tokenPassword = async (req, res) => {
     try {
-        const { email } = req.body;
-        const sql = `SELECT * FROM users WHERE email = '${email}'`;
+        const { correo } = req.body;
+        const sql = `SELECT * FROM users WHERE correo = '${correo}'`;
         const [user] = await pool.query(sql);
         
-        if (!user[0].email) {
+        if (!user[0].correo) {
             return res.status(404).json({ message: "Correo del usuario no definido" });
         }else if (user.length > 0) {
             const token = jwt.sign({ id: user[0].id }, "estemensajedebeserlargoyseguro", { expiresIn: "2h" });
@@ -127,7 +127,7 @@ export const resetPassword = async (req, res) => {
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        const sqlUpdate = "UPDATE users SET password_user = ? WHERE id = ?";
+        const sqlUpdate = "UPDATE users SET password = ? WHERE id = ?";
         const [actualizar] = await pool.query(sqlUpdate, [hashedPassword, userId]);
 
         if (actualizar.affectedRows > 0) {

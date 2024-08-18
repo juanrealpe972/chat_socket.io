@@ -4,14 +4,14 @@ import { pool } from "../database/conexion.js";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/usuarios");
+    cb(null, "public/users");
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
   },
 });
 const uploat = multer({ storage: storage });
-export const cargarImagen = uploat.single("imagen_user");
+export const cargarImagen = uploat.single("imagen");
 
 export const getUsers = async (req, res) => {
   try {
@@ -29,37 +29,30 @@ export const getUsers = async (req, res) => {
 
 export const createUser = async (req, res) => {
   try {
-    const { id, nombre, email, password, rol_user } = req.body;
+    const { username, correo, password } = req.body;
     const bcryptPassword = bcrypt.hashSync(password, 12);
-    let imagen_user = req.file ? req.file.originalname : "";
+    let imagen = req.file ? req.file.originalname : "";
 
-    const checkSqlCedula = `SELECT * FROM users WHERE id = '${id}'`;
-    const [existingCedula] = await pool.query(checkSqlCedula);
-
-    const checkSqlEmail = `SELECT * FROM users WHERE email = '${email}'`;
+    const checkSqlEmail = `SELECT * FROM users WHERE correo = '${correo}'`;
     const [existingEmail] = await pool.query(checkSqlEmail);
 
-    if (existingCedula.length > 0) {
-      return res.status(400).json({ message: "Ya existe un usuario con esa cédula" });
-    }
-
     if (existingEmail.length > 0) {
-      return res.status(400).json({ message: "Ya existe un usuario con ese correo" });
+      res.status(400).json({ message: "Ya existe un usuario con ese correo" });
     }
 
-    let sql = `INSERT INTO users (id, nombre, email, password, rol_user, estado`;
+    let sql = `INSERT INTO users ( username, correo, password, rol, estado`;
 
-    const params = [id, nombre, email, bcryptPassword, rol_user, "activo"]
+    const params = [ username, correo, bcryptPassword, "admin", "activo"]
 
-    if (imagen_user) {
+    if (imagen) {
       sql += `, imagen`;
-      params.push(imagen_user);
+      params.push(imagen);
     }
-    sql += ` ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    sql += ` ) VALUES (?, ?, ?, ?, ?, ?)`;
 
     const [result] = await pool.query(sql, params);
     if (result.affectedRows > 0) {
-      res.status(200).json({ status: 200, message: "Usuario creado exitosamente" });
+      res.status(200).json({ message: "Usuario creado exitosamente" });
     } else {
       res.status(404).json({ message: "No se pudo crear el usuario" });
     }
@@ -85,11 +78,11 @@ export const updateUser = async (req, res) => {
     const [existingEmail] = await pool.query(checkSqlEmail, [email, id_user]);
 
     if (existingCedula.length > 0) {
-      return res.status(400).json({ message: "Ya existe un usuario con esa cédula" });
+      res.status(400).json({ message: "Ya existe un usuario con esa cédula" });
     }
 
     if (existingEmail.length > 0) {
-      return res.status(400).json({ message: "Ya existe un usuario con ese correo" });
+      res.status(400).json({ message: "Ya existe un usuario con ese correo" });
     }
 
     if (imagen_user) {
@@ -134,13 +127,13 @@ export const updatePasswordUser = async (req, res) => {
     const [rows] = await pool.query(`SELECT * FROM users WHERE id = '${id}'`);
     
     if (rows.length === 0) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
+      res.status(404).json({ message: "Usuario no encontrado" });
     }
 
     const user = rows[0];
     const validPassword = await bcrypt.compare(oldPassword, user.password);
     if (!validPassword) {
-      return res.status(404).json({ message: "Contraseña incorrecta" });
+      res.status(404).json({ message: "Contraseña incorrecta" });
     }
     if(newPassword !== confirmPassword){
       res.status(404).json({ message: "La nueva contraseña no coincide con la de confirmar contraseña" });
