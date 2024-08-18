@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import Logo from './Logo';
 
 const Header = () => {
     const [auth, setAuth] = useState<boolean>(false);
@@ -53,7 +54,7 @@ const Header = () => {
         <AppBar position="static">
             <Toolbar>
                 <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                    Mi Aplicación
+                    <Logo />
                 </Typography>
                 {auth && user ? (
                     <div>
