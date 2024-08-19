@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-08-2024 a las 06:53:21
+-- Tiempo de generación: 19-08-2024 a las 06:48:37
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -87,7 +87,6 @@ CREATE TABLE `users` (
   `imagen` varchar(255) DEFAULT NULL,
   `correo` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `rol` enum('visitante','admin') NOT NULL,
   `estado` enum('activo','inactivo') NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -96,8 +95,12 @@ CREATE TABLE `users` (
 -- Volcado de datos para la tabla `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `imagen`, `correo`, `password`, `rol`, `estado`, `created_at`) VALUES
-(1, 'Admin', 'userAdmin.jpg', 'admin@gmail.com', '$2b$12$V.RrJmFzGzDbtkNJRB.XpuDOva75Cakc4p9z80StiA/0kgpOhPqL6', 'admin', 'activo', '2024-08-18 01:34:41');
+INSERT INTO `users` (`id`, `username`, `imagen`, `correo`, `password`, `estado`, `created_at`) VALUES
+(1, 'Admin', 'userAdmin.jpg', 'admin@gmail.com', '$2b$12$V.RrJmFzGzDbtkNJRB.XpuDOva75Cakc4p9z80StiA/0kgpOhPqL6', 'activo', '2024-08-18 01:34:41'),
+(4, 'Juan', NULL, 'juan@gmail.com', '$2b$12$qYmO5ivvCEgUdL4YdXf4e.0Cg3Q4Z0b8gVzZEI9p7UFPDyveS7C2W', 'activo', '2024-08-19 04:25:49'),
+(5, 'Pepe', 'userAdmin.jpg', 'pepe@gmail.com', '$2b$12$vCa8qC5xSRP3IV1QwXGgbuTt/BEVMvTb8pB7yPCcedxQbCg.15pDe', 'activo', '2024-08-19 04:34:15'),
+(6, 'Camilo', 'userAdmin.jpg', 'cami@gmail.com', '$2b$12$jxqGc66oB5f9bsfjwurf0OPloNHW.NIFj/XSwSFYoSZGG5JJYO5ri', 'activo', '2024-08-19 04:44:50'),
+(7, 'Song', 'background.jpg', 'song@gmail.com', '$2b$12$xx7oJuiNa6tRU41nsjKEM.1XZR3YC7XNGFCZS7rPoDPuMfL8x0zUu', 'activo', '2024-08-19 04:45:32');
 
 --
 -- Índices para tablas volcadas
@@ -166,7 +169,7 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Restricciones para tablas volcadas
