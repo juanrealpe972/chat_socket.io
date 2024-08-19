@@ -51,9 +51,12 @@ const Header = () => {
     };
 
     return (
-        <AppBar position="static">
+        <AppBar 
+            position="static" 
+            sx={{ backgroundColor: '#F7F4F3', color: '#071013' }}
+        >
             <Toolbar>
-                <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                <Typography variant="h6" sx={{ flexGrow: 1, color: '#071013' }}>
                     <Logo />
                 </Typography>
                 {auth && user ? (
@@ -65,22 +68,16 @@ const Header = () => {
                             aria-controls="menu-appbar"
                             aria-haspopup="true"
                             onClick={handleMenu}
-                            color="inherit"
+                            sx={{ color: '#071013' }}
                         >
                             <AccountCircle />
                         </IconButton>
                         <Menu
                             id="menu-appbar"
                             anchorEl={anchorEl}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                             keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
+                            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                             open={Boolean(anchorEl)}
                             onClose={handleClose}
                         >
@@ -88,13 +85,22 @@ const Header = () => {
                             <MenuItem onClick={handleLogout}>Cerrar Sesión</MenuItem>
                         </Menu>
                     </div>
-                    ) : (
+                ) : (
                     <div>
-                        <Button color="inherit" onClick={() => navigate('/login')}>Iniciar Sesión</Button>
-                        <Button color="inherit" onClick={() => navigate('/register')}>Registrarse</Button>
+                        <Button 
+                            onClick={() => navigate('/login')} 
+                            sx={{ color: '#071013' }}
+                        >
+                            Iniciar Sesión
+                        </Button>
+                        <Button 
+                            onClick={() => navigate('/register')} 
+                            sx={{ color: '#071013' }}
+                        >
+                            Registrarse
+                        </Button>
                     </div>
-                    )
-                }
+                )}
             </Toolbar>
         </AppBar>
     );

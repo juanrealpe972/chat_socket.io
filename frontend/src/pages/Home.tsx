@@ -8,10 +8,10 @@ function Home() {
     }
 
     return (
-        <>
+        <div className='mt-6'>
             <div className='bg-slate-500'>Home</div>
             <Button variant="contained" onClick={() => alertaBtn()}>Hello world</Button>
-        </>
+        </div>
     )
 }
 

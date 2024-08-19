@@ -14,7 +14,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 const defaultTheme = createTheme();
 
@@ -71,7 +71,6 @@ export default function Register() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
-        <ToastContainer />
         <CssBaseline />
         <Box
           sx={{

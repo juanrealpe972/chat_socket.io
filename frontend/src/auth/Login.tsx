@@ -11,7 +11,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Card, CardContent } from '@mui/material';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios"
 
@@ -46,7 +46,7 @@ export default function Login() {
           localStorage.setItem('token', token);
           localStorage.setItem('user', JSON.stringify(user));
           toast.success("Inicio de sesión exitoso");
-          navigation("/login");
+          navigation("/dashboard");
         }
       }
     } catch (err: any) {
@@ -72,7 +72,6 @@ export default function Login() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
-      <ToastContainer />
       <CssBaseline />
         <Grid item xs={false} sm={4} md={7}
           sx={{
