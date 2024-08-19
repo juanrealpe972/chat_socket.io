@@ -33,31 +33,33 @@ export const createUser = async (req, res) => {
     const bcryptPassword = bcrypt.hashSync(password, 12);
     let imagen = req.file ? req.file.originalname : "";
 
-    const checkSqlEmail = `SELECT * FROM users WHERE correo = '${correo}'`;
-    const [existingEmail] = await pool.query(checkSqlEmail);
+    const checkSqlEmail = `SELECT * FROM users WHERE correo = ?`;
+    const [existingEmail] = await pool.query(checkSqlEmail, [correo]);
 
     if (existingEmail.length > 0) {
-      res.status(400).json({ message: "Ya existe un usuario con ese correo" });
+      return res.status(400).json({ message: "Ya existe un usuario con ese correo" });
     }
 
-    let sql = `INSERT INTO users ( username, correo, password, rol, estado`;
-
-    const params = [ username, correo, bcryptPassword, "admin", "activo"]
+    let sql = `INSERT INTO users (username, correo, password, estado`;
+    const params = [username, correo, bcryptPassword, "activo"];
 
     if (imagen) {
       sql += `, imagen`;
       params.push(imagen);
     }
-    sql += ` ) VALUES (?, ?, ?, ?, ?, ?)`;
+    sql += `) VALUES (?, ?, ?, ?`;
+    if (imagen) sql += `, ?`;
+    sql += `)`;
 
     const [result] = await pool.query(sql, params);
+
     if (result.affectedRows > 0) {
-      res.status(200).json({ message: "Usuario creado exitosamente" });
+      return res.status(200).json({ message: "Usuario creado exitosamente" });
     } else {
-      res.status(404).json({ message: "No se pudo crear el usuario" });
+      return res.status(404).json({ message: "No se pudo crear el usuario" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Error en el servidor" + error });
+    return res.status(500).json({ message: "Error en el servidor: " + error.message });
   }
 };
 

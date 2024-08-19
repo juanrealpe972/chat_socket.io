@@ -12,22 +12,66 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 
 const defaultTheme = createTheme();
 
-export default function SignUp() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+export default function Register() {
+  const [error, setError] = React.useState<string | null>(null);
+  const [image, setImage] = React.useState<File | null>(null);
+  const [imagePreview, setImagePreview] = React.useState<string | null>(null);
+  const navigation = useNavigate();
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string); 
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImagePreview(null);
+    }
+  };
+
+  const handleImageRemove = () => {
+    setImage(null);
+    setImagePreview(null);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+
+    const formData = new FormData();
+    formData.append('username', data.get('username') as string);
+    formData.append('correo', data.get('correo') as string);
+    formData.append('password', data.get('password') as string);
+    if (image) formData.append('imagen', image);
+
+    try {
+      const response = await axios.post('http://localhost:3000/v1/users', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log(response.data);
+      toast.success("Registro de usuario exitoso");
+      navigation('/register');
+    } catch (error: any) {
+      setError(error.response?.data?.message || 'Error en el servidor');
+      console.error(error);
+    }
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
+        <ToastContainer />
         <CssBaseline />
         <Box
           sx={{
@@ -43,36 +87,59 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Registrarme
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          {error && <Typography color="error">{error}</Typography>}
+          <Box component="form" noValidate onSubmit={handleSubmit}>
+            <Grid item xs={12} marginY={2} className="flex justify-center">
+              <input
+                accept="image/*"
+                className="hidden"
+                id="image-upload"
+                type="file"
+                onChange={handleImageChange}
+              />
+              <label htmlFor="image-upload" className="cursor-pointer relative group">
+                <div className="w-32 h-32 rounded-full border-2 border-dashed border-gray-500 flex items-center justify-center overflow-hidden">
+                  {imagePreview ? (
+                    <img
+                      src={imagePreview}
+                      alt="Vista previa"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-gray-500 text-center">Seleccionar Imagen</span>
+                  )}
+                </div>
+                <div className="absolute inset-0 bg-black bg-opacity-60 text-center rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                  Seleccionar imagen
+                </div>
+              </label>
+            </Grid>
+            {imagePreview && (
+              <Grid item xs={12} className="text-center" marginBottom={2}>
+                <Button variant="outlined" color="secondary" onClick={handleImageRemove}>
+                  Quitar Imagen
+                </Button>
+              </Grid>
+            )}
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
-                  name="firstName"
+                  name="username"
                   required
                   fullWidth
-                  id="firstName"
-                  label="Primer nombre"
+                  id="username"
+                  label="Nombre completo"
                   autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Apellido"
-                  name="lastName"
-                  autoComplete="family-name"
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="email"
+                  id="correo"
                   label="Correo electrónico"
-                  name="email"
+                  name="correo"
                   autoComplete="email"
                 />
               </Grid>
@@ -90,7 +157,7 @@ export default function SignUp() {
               <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="Acepto los terminos y condiciones."
+                  label="Acepto los términos y condiciones."
                 />
               </Grid>
             </Grid>
