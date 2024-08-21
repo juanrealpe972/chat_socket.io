@@ -13,9 +13,9 @@ const AppBar = () => {
     const parsedUser = user ? JSON.parse(user) : null;
 
     return auth && parsedUser ? (
-        <div className="flex h-auto min-h-screen bg-[#FDFBF6]">
+        <div className="flex flex-auto h-auto bg-[#efefef]">
             <Navbar />
-            <div className="flex-grow">
+            <div className="grow">
                 <HeaderM />
                 <Outlet />
             </div>
@@ -23,7 +23,7 @@ const AppBar = () => {
     ) : (
         <div className="h-auto min-h-screen bg-[#FDFBF6] flex flex-col">
             <Header />
-            <div className="flex-grow">
+            <div className="grow">
                 <Outlet />
             </div>
             <Footer />

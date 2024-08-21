@@ -5,6 +5,8 @@ interface AuthContextType {
   user: string | null;
   login: (username: string) => void;
   logout: () => void;
+  open: boolean;
+  setOpen: (state: boolean) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -19,6 +21,7 @@ export const UserContext = () => {
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<string | null>(null);
+  const [open, setOpen] = useState<boolean>(true);
 
   const login = (username: string) => {
     setUser(username);
@@ -29,7 +32,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, open, setOpen}}>
       {children}
     </AuthContext.Provider>
   );

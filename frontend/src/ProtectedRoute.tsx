@@ -30,7 +30,7 @@ const ProtectedRoute: React.FC = () => {
         <DialogTitle>{"Acceso Restringido"}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Tienes que iniciar sesión primero para poder ingresar a SubCoffee.
+            Tienes que iniciar sesión primero para poder ingresar a Dev.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Logo from "./Logo";
 import { icono } from "./IconsAtom"; 
+import { UserContext } from "../context/UserContext";
 
 interface MenuItem {
   title: string;
@@ -11,10 +12,10 @@ interface MenuItem {
 }
 
 const Navbar: React.FC = () => {
-  const [open, setOpen] = useState<boolean>(() => JSON.parse(localStorage.getItem("sidebarOpen") || "true"));
   const location = useLocation();
   const [sidebar, setSidebar] = useState<boolean>(true);
   const [activeLink, setActiveLink] = useState<string>(location.pathname);
+  const {open} = UserContext()
 
   const Menus: MenuItem[] = [
       { title: "Usuarios", link: "/users", icon: icono.iconoRol },
@@ -45,14 +46,11 @@ const Navbar: React.FC = () => {
   }, [open]);
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen border-r border-[#838383]">
       {sidebar && (
         <div
           className={`${open ? "w-60" : "w-20"} bg-[#F7F4F3] max-h-full p-5 pt-5 relative duration-300`}
         >
-          <div  className={`absolute justify-center items-center cursor-pointer -right-3 top-9 w-6 h-6 border-dark-purple border-2 rounded-full ${!open && "rotate-180"}`}>
-            {<icono.iconoLeft onClick={() => setOpen(!open)}/>}
-          </div>
           <div className="flex items-center">
             <Logo />
             <h1

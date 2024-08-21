@@ -9,14 +9,11 @@ import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import MoreIcon from "@mui/icons-material/MoreVert";
 import { useScrollTrigger } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+
+import { UserContext } from "../context/UserContext";
+import { icono } from "./IconsAtom"
 
 const Search = styled("div")(({ theme }) => ({
     position: "relative",
@@ -80,6 +77,8 @@ export default function PrimarySearchAppBar() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
     const navigate = useNavigate();
+    const {setOpen, open} = UserContext()
+    const idUser = JSON.parse(localStorage.getItem('user') || '0')
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -115,7 +114,6 @@ export default function PrimarySearchAppBar() {
         handleClose();
     };
 
-    const menuId = "primary-search-account-menu";
     const renderMenu = (
         <Menu
             anchorEl={anchorEl}
@@ -123,7 +121,7 @@ export default function PrimarySearchAppBar() {
                 vertical: "top",
                 horizontal: "right",
             }}
-            id={menuId}
+            id={"primary-search-account-menu"}
             keepMounted
             transformOrigin={{
                 vertical: "top",
@@ -132,12 +130,11 @@ export default function PrimarySearchAppBar() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+            <MenuItem onClick={() => navigate(`/profile/${idUser.id}`)}>Profile</MenuItem>
             <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
         </Menu>
     );
 
-    const mobileMenuId = "primary-search-account-menu-mobile";
     const renderMobileMenu = (
         <Menu
             anchorEl={mobileMoreAnchorEl}
@@ -145,7 +142,7 @@ export default function PrimarySearchAppBar() {
                 vertical: "top",
                 horizontal: "right",
             }}
-            id={mobileMenuId}
+            id={"primary-search-account-menu-mobile"}
             keepMounted
             transformOrigin={{
                 vertical: "top",
@@ -155,9 +152,9 @@ export default function PrimarySearchAppBar() {
             onClose={handleMobileMenuClose}
         >
             <MenuItem>
-                <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+                <IconButton size="large" aria-label="show 4 new mails" className="text-[#071013]">
                 <Badge badgeContent={4} color="error">
-                    <MailIcon />
+                    <icono.iconoMailIcon />
                 </Badge>
                 </IconButton>
                 <p>Messages</p>
@@ -166,10 +163,10 @@ export default function PrimarySearchAppBar() {
                 <IconButton
                     size="large"
                     aria-label="show 17 new notifications"
-                    color="inherit"
+                    className="text-[#071013]"
                 >
                 <Badge badgeContent={17} color="error">
-                    <NotificationsIcon />
+                    <icono.iconoNotificationsIcon />
                 </Badge>
                 </IconButton>
                 <p>Notifications</p>
@@ -180,9 +177,9 @@ export default function PrimarySearchAppBar() {
                     aria-label="account of current user"
                     aria-controls="primary-search-account-menu"
                     aria-haspopup="true"
-                    color="inherit"
+                    className="text-[#071013]"
                 >
-                <AccountCircle />
+                <icono.iconoAccountCircle />
                 </IconButton>
                 <p>Profile</p>
             </MenuItem>
@@ -191,76 +188,78 @@ export default function PrimarySearchAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
+      <AppBar position="static" elevation={1}>
+        <Toolbar className="bg-white">
           <IconButton
             size="large"
             edge="start"
-            color="inherit"
+            className="text-[#071013]"
+            onClick={() => {open ? setOpen(false) : setOpen(true)}}
             aria-label="open drawer"
             sx={{ mr: 2 }}
           >
-            <MenuIcon />
+            <icono.iconoMenuIcon />
           </IconButton>
           <Typography
             variant="h6"
             noWrap
+            className="text-[#071013]"
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
             MUI
           </Typography>
-          <Search>
+          <Search sx={{ color: '#071013', backgroundColor: 'ButtonFace', borderRadius: '4px' }} >
             <SearchIconWrapper>
-              <SearchIcon />
+              <icono.iconoSearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
+              sx={{ color: '#071013' }}
             />
           </Search>
-          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ flexGrow: 1 }} />  
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
               size="large"
               aria-label="show 4 new mails"
-              color="inherit"
+              className="text-[#071013]"
             >
               <Badge badgeContent={4} color="error">
-                <MailIcon />
+                <icono.iconoMailIcon />
               </Badge>
             </IconButton>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
-              color="inherit"
+              className="text-[#071013]"
             >
               <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
+                <icono.iconoNotificationsIcon />
               </Badge>
             </IconButton>
             <IconButton
               size="large"
               edge="end"
               aria-label="account of current user"
-              aria-controls={menuId}
+              aria-controls={"primary-search-account-menu"}
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
-              color="inherit"
+              className="text-[#071013]"
             >
-              <AccountCircle />
+              <icono.iconoAccountCircle />
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="show more"
-              aria-controls={mobileMenuId}
+              aria-controls={"primary-search-account-menu-mobile"}
               aria-haspopup="true"
               onClick={handleMobileMenuOpen}
-              color="inherit"
+              className="text-[#071013]"
             >
-              <MoreIcon />
+              <icono.iconoMoreIcon />
             </IconButton>
           </Box>
         </Toolbar>

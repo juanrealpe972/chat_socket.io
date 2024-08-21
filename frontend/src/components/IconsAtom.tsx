@@ -39,6 +39,13 @@ import { TfiWorld } from "react-icons/tfi";
 import { CiCoffeeBean } from "react-icons/ci";
 import { FaChevronLeft } from "react-icons/fa";
 
+import MenuIcon from "@mui/icons-material/Menu";
+import SearchIcon from "@mui/icons-material/Search";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import MailIcon from "@mui/icons-material/Mail";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import MoreIcon from "@mui/icons-material/MoreVert";
+
 export const icono = {
   iconoVere: LiaMapMarkedAltSolid,
   iconoDepar : GrMap,
@@ -81,5 +88,12 @@ export const icono = {
   iconoValor: Md18UpRating,
   iconoQuantity: MdProductionQuantityLimits,
   iconoCambiar: FaExchangeAlt,
-  iconoLeft:FaChevronLeft
+  iconoLeft:FaChevronLeft,
+
+  iconoMenuIcon : MenuIcon,
+  iconoSearchIcon : SearchIcon,
+  iconoAccountCircle : AccountCircle,
+  iconoMailIcon : MailIcon,
+  iconoNotificationsIcon : NotificationsIcon,
+  iconoMoreIcon : MoreIcon,
 };

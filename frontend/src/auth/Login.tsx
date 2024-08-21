@@ -75,7 +75,7 @@ export default function Login() {
       <CssBaseline />
         <Grid item xs={false} sm={4} md={7}
           sx={{
-            backgroundImage: 'url("../../public/img/image.png")',
+            backgroundImage: 'url("../../public/img/imageLogin.png")',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
             backgroundSize: '100%',

@@ -112,7 +112,7 @@ export const getUser = async (req, res) => {
     let sql = `SELECT * FROM users WHERE id = '${id}'`;
     const [user] = await pool.query(sql);
     if (user.length > 0) {
-      res.status(200).json({ message: "Usuario encontrado con exito", data: user });
+      res.status(200).json({ message: "Usuario encontrado con exito", data: user[0] });
     } else {
       res.status(404).json({ message: "Error al encontrar el usuario con ese ID" });
     }
