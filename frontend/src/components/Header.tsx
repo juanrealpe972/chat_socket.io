@@ -1,54 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem } from '@mui/material';
-import { AccountCircle } from '@mui/icons-material';
+import React from 'react';
+import { AppBar, Toolbar, Typography, Button, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import Logo from './Logo';
+import { icono } from './IconsAtom';
 
 const Header = () => {
-    const [auth, setAuth] = useState<boolean>(false);
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const [user, setUser] = useState<string | null>(null);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const checkAuth = async () => {
-            try {
-                const token = await localStorage.getItem('token');
-                const userData = await localStorage.getItem('user');
-
-                if (token && userData) {
-                    setAuth(true);
-                    setUser(userData ? JSON.parse(userData).username : null); 
-                } else {
-                    setAuth(false);
-                }
-            } catch (error) {
-                console.error('Error fetching auth data', error);
-            }
-        };
-
-        checkAuth();
-    }, []);
-
-    const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const handleLogout = async () => {
-        try {
-            localStorage.clear();
-            setAuth(false);
-            setUser(null);
-            navigate('/'); 
-        } catch (error) {
-            console.error('Error logging out', error);
-        }
-        handleClose();
-    };
 
     return (
         <AppBar 
@@ -56,37 +12,23 @@ const Header = () => {
             sx={{ backgroundColor: '#F7F4F3', color: '#071013' }}
         >
             <Toolbar>
-                <Typography variant="h6" sx={{ flexGrow: 1, color: '#071013' }}>
-                    <Logo />
-                </Typography>
-                {auth && user ? (
-                    <div>
-                        <IconButton
-                            size="large"
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleMenu}
-                            sx={{ color: '#071013' }}
+                <Grid container alignItems="center">
+                    <Grid item xs={6} sm={4} display="flex" alignItems="center">
+                        <icono.iconoChat 
+                            sx={{ fontSize: 35, color: 'primary.main', cursor: 'pointer' }} 
+                            onClick={() => navigate('/dashboard')} 
+                        />
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                            sx={{ pl: 2, display: { xs: 'none', sm: 'block' }, cursor: 'pointer' }}
+                            onClick={() => navigate('/dashboard')}
                         >
-                            <AccountCircle />
-                        </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorEl}
-                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                            keepMounted
-                            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                            open={Boolean(anchorEl)}
-                            onClose={handleClose}
-                        >
-                            <MenuItem onClick={handleClose}>Perfil</MenuItem>
-                            <MenuItem onClick={handleLogout}>Cerrar Sesión</MenuItem>
-                        </Menu>
-                    </div>
-                ) : (
-                    <div>
+                            RED
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={6} sm={8} display="flex" justifyContent="flex-end">
                         <Button 
                             onClick={() => navigate('/login')} 
                             sx={{ color: '#071013' }}
@@ -99,8 +41,8 @@ const Header = () => {
                         >
                             Registrarse
                         </Button>
-                    </div>
-                )}
+                    </Grid>
+                </Grid>
             </Toolbar>
         </AppBar>
     );

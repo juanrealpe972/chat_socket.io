@@ -4,6 +4,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 
+import { AuthProvider } from './context/UserContext';
+
 import Login from './auth/Login';
 import Register from './auth/Register';
 import ResetPassword from './auth/ResetPassword';
@@ -11,11 +13,10 @@ import Help from './pages/Help';
 import colors from './themes/colors.json';
 import AppBar from './components/AppBar';
 import ProtectedRoute from './ProtectedRoute';
-import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
-import { AuthProvider } from './context/UserContext';
 import Profile from './pages/Profile';
 import ChatPage from './pages/ChatPage';
+import Dashboard from './pages/Dashboard';
 
 const theme = createTheme(colors); 
 

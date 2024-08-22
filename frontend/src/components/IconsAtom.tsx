@@ -45,6 +45,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import ChatIcon from '@mui/icons-material/Chat';
 
 export const icono = {
   iconoVere: LiaMapMarkedAltSolid,
@@ -96,4 +97,5 @@ export const icono = {
   iconoMailIcon : MailIcon,
   iconoNotificationsIcon : NotificationsIcon,
   iconoMoreIcon : MoreIcon,
+  iconoChat : ChatIcon,
 };

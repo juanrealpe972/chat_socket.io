@@ -8,8 +8,6 @@ import {
     Divider,
     Grid,
     FormControlLabel,
-    Button,
-    Menu,
     MenuItem,
 } from "@mui/material";
 import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
@@ -18,6 +16,7 @@ import FormatTextdirectionRToLIcon from "@mui/icons-material/FormatTextdirection
 import COLORS from "./colors.json";
 import { icono } from "../components/IconsAtom"
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 export default function CustomDrawer() {
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -25,7 +24,7 @@ export default function CustomDrawer() {
     const [rightToLeft, setRightToLeft] = useState(false);
     const idUser = JSON.parse(localStorage.getItem('user') || '0')
     const navigate = useNavigate();
-
+    const { setUserAuth } = UserContext();
 
     const toggleDrawer = (open: boolean) => () => {
         setDrawerOpen(open);
@@ -70,6 +69,7 @@ export default function CustomDrawer() {
         try {
             localStorage.clear();
             navigate('/'); 
+            setUserAuth(false)
         } catch (error) {
             console.error('Error logging out', error);
         }
@@ -80,17 +80,14 @@ export default function CustomDrawer() {
             <MenuItem onClick={() => navigate(`/dashboard/profile/${idUser.id}`)}>Profile</MenuItem>
             <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
             <Typography variant="h6" sx={{ mb: 2 }}>
-                Settings
+                Ajustes
             </Typography>
             <Grid container spacing={2}>
-                {/* Toggle Buttons */}
                 <Grid item xs={6}>
                     <Box display="flex" flexDirection="column" alignItems="center">
                         <FormControlLabel
-                            control={
-                                <Switch checked={darkMode} onChange={handleThemeChange} />
-                            }
-                            label="Dark mode"
+                            control={ <Switch checked={darkMode} onChange={handleThemeChange} /> }
+                            label="Modo oscuro"
                         />
                         <Brightness4Icon />
                     </Box>
@@ -104,29 +101,16 @@ export default function CustomDrawer() {
                                 onChange={handleDirectionChange}
                                 />
                             }
-                            label="Right to left"
+                            label="Cambiar dirección de menú"
                         />
                         <FormatTextdirectionRToLIcon />
-                    </Box>
-                </Grid>
-
-                <Divider sx={{ width: "100%", my: 2 }} />
-
-                <Grid item xs={6}>
-                    <Box display="flex" flexDirection="column" alignItems="center">
-                        <Button variant="outlined">Apparent</Button>
-                    </Box>
-                </Grid>
-                <Grid item xs={6}>
-                    <Box display="flex" flexDirection="column" alignItems="center">
-                        <Button variant="contained">Integrate</Button>
                     </Box>
                 </Grid>
             </Grid>
 
             <Divider sx={{ width: "100%", my: 2 }} />
             <Typography variant="body2" sx={{ mb: 1 }}>
-                Presets
+                Preajustes de colores
             </Typography>
             <Grid container spacing={1}>
                 <Grid item xs={3}>

@@ -3,26 +3,28 @@ import { Outlet } from "react-router-dom";
 
 import Header from "./Header";
 import HeaderM from "./HeaderM";
-import Footer from "./Footer";
+import { UserContext } from "../context/UserContext";
 
 const AppBar = () => {
     const auth = localStorage.getItem("token");
     const user = localStorage.getItem("user");
+    const { userAuth } = UserContext()
 
     const parsedUser = user ? JSON.parse(user) : null;
 
-    return auth && parsedUser ? (
-        <div className="flex flex-auto flex-col h-auto bg-[#efefef]">
+    return auth && parsedUser && userAuth ? (
+        <div className="h-screen bg-[#efefef]">
             <HeaderM />
-            <Outlet />
-        </div>
-    ) : (
-        <div className="h-auto min-h-screen bg-[#FDFBF6] flex flex-col">
-            <Header />
-            <div className="grow">
+            <div className="p-6">
                 <Outlet />
             </div>
-            <Footer />
+        </div>
+    ) : (
+        <div className="bg-[#FDFBF6] flex flex-col h-screen">
+            <Header />
+            <div className="flex-1 overflow-auto">
+                <Outlet />
+            </div>
         </div>
     );
 };

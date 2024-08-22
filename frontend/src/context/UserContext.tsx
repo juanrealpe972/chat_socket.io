@@ -3,7 +3,9 @@ import axios from 'axios';
 
 interface AuthContextType {
   user: string;
+  userAuth: boolean;
   login: (username: string) => void;
+  setUserAuth: (userAuth: boolean) => void;
   logout: () => void;
 }
 
@@ -19,6 +21,7 @@ export const UserContext = () => {
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState('');
+  const [userAuth, setUserAuth] = useState(false);
 
   const login = (username: string) => {
     setUser(username);
@@ -29,7 +32,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, userAuth, setUserAuth }}>
       {children}
     </AuthContext.Provider>
   );

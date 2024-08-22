@@ -30,7 +30,7 @@ const ProtectedRoute: React.FC = () => {
         <DialogTitle>{"Acceso Restringido"}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Tienes que iniciar sesión primero para poder ingresar a Dev.
+            Tienes que iniciar sesión primero para poder ingresar a la RED.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

@@ -31,7 +31,7 @@ const Profile: React.FC = () => {
     }, [id]);
 
     return (
-        <div className='m-12'>
+        <div>
             <CssBaseline />
             <h2 className='text-3xl'>Profile</h2>
             <Breadcrumbs separator=">" aria-label="breadcrumb">

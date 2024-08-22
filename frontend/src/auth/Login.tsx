@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios"
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { UserContext } from '../context/UserContext';
 
 const defaultTheme = createTheme();
 
@@ -24,6 +25,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const { setUserAuth } = UserContext()
 
   const navigation = useNavigate()
 
@@ -48,6 +50,7 @@ export default function Login() {
           const { user, token } = response.data;
           localStorage.setItem('token', token);
           localStorage.setItem('user', JSON.stringify(user));
+          setUserAuth(true)
           toast.success("Inicio de sesión exitoso");
           navigation("/dashboard");
         }
