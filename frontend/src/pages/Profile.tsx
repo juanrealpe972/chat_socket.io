@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Breadcrumbs, CssBaseline, Grid, Link, Tab, Tabs, Typography } from '@mui/material';
+import { Avatar, Box, Breadcrumbs, CssBaseline, Grid, Link, Tab, Tabs, Typography } from '@mui/material';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
 import { useParams } from 'react-router-dom';
 
 import axios from 'axios';
 import { icono } from '../components/IconsAtom';
+import DatesProfile from './DatesProfile';
 
 const Profile: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const [user, setUser] = useState<{ username: string } | null>(null);
+    const [user, setUser] = useState<{ username: string, imagen : string, correo: string } | null>(null);
     const [value, setValue] = useState('1');
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -30,14 +31,14 @@ const Profile: React.FC = () => {
     }, [id]);
 
     return (
-        <div className='mx-12 my-12'>
+        <div className='m-12'>
             <CssBaseline />
-            <h2>Profile {id} </h2>
+            <h2 className='text-3xl'>Profile</h2>
             <Breadcrumbs separator=">" aria-label="breadcrumb">
-                <Link underline="hover" color="inherit" href="/">
+                <Link underline="hover" color="inherit" href="/dashboard">
                     Dashboard
                 </Link>
-                <Link underline="hover" color="inherit" href="/catalog">
+                <Link underline="hover" color="inherit" href={`/dashboard/profile/${id}`}>
                     User
                 </Link>
                 <Typography color="text.primary" className='cursor-default'>{user?.username || 'Loading...'}</Typography>
@@ -56,6 +57,18 @@ const Profile: React.FC = () => {
                             backgroundRepeat: 'no-repeat',
                         }}
                     />
+                    <div className='flex items-center gap-x-5'>
+                        <Avatar
+                            alt="User Avatar"
+                            src={user?.imagen ? `http://localhost:3000/users/${user.imagen}` : 'fallback-image-path.jpg'}
+                            sx={{ width: 120, height: 120 }}
+                            className='-mt-24 ml-10'
+                        />
+                        <div className='flex flex-col -mt-24'>
+                            <p className='text-2xl text-white'>{user?.username}</p>
+                            <p className='text-gray-300'>{user?.correo}</p>
+                        </div>
+                    </div>
                 </div>
                 <div className='flex justify-end bg-white rounded-b-3xl'>
                     <Box>
@@ -70,7 +83,7 @@ const Profile: React.FC = () => {
                 </div>
             </div>
             <TabContext value={value}>
-                <TabPanel value="1">Profile</TabPanel>
+                <TabPanel value="1"><DatesProfile/></TabPanel>
                 <TabPanel value="2">Item Two</TabPanel>
                 <TabPanel value="3">Item Three</TabPanel>
                 <TabPanel value="4">Item Four</TabPanel>

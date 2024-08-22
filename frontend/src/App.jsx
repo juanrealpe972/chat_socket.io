@@ -15,6 +15,7 @@ import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
 import { AuthProvider } from './context/UserContext';
 import Profile from './pages/Profile';
+import ChatPage from './pages/ChatPage';
 
 const theme = createTheme(colors); 
 
@@ -33,7 +34,8 @@ function App() {
               <Route path="/help" element={<Help />} />
               <Route path='/' element={<ProtectedRoute />}>
                 <Route path='/dashboard' element={<Dashboard />} />
-                <Route path='/profile/:id' element={<Profile />} />
+                <Route path='/dashboard/profile/:id' element={<Profile />} />
+                <Route path='/dashboard/chat' element={<ChatPage />} />
               </Route>
             </Route>
           </Routes>

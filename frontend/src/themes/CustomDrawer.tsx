@@ -9,17 +9,23 @@ import {
     Grid,
     FormControlLabel,
     Button,
+    Menu,
+    MenuItem,
 } from "@mui/material";
-import SettingsIcon from "@mui/icons-material/Settings";
 import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import FormatTextdirectionRToLIcon from "@mui/icons-material/FormatTextdirectionRToL";
-import COLORS from "./colors.json"; 
+import COLORS from "./colors.json";
+import { icono } from "../components/IconsAtom"
+import { useNavigate } from "react-router-dom";
 
 export default function CustomDrawer() {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [darkMode, setDarkMode] = useState(false);
     const [rightToLeft, setRightToLeft] = useState(false);
+    const idUser = JSON.parse(localStorage.getItem('user') || '0')
+    const navigate = useNavigate();
+
 
     const toggleDrawer = (open: boolean) => () => {
         setDrawerOpen(open);
@@ -33,7 +39,6 @@ export default function CustomDrawer() {
         setRightToLeft(!rightToLeft);
     };
 
-  // Crear el tema utilizando los colores importados de color.json
     const theme = createTheme({
         palette: {
             mode: darkMode ? "dark" : "light",
@@ -61,8 +66,19 @@ export default function CustomDrawer() {
         direction: rightToLeft ? "rtl" : "ltr",
     });
 
+    const handleLogout = async () => {
+        try {
+            localStorage.clear();
+            navigate('/'); 
+        } catch (error) {
+            console.error('Error logging out', error);
+        }
+    };
+
     const drawerContent = (
         <Box sx={{ width: 300, padding: 2 }}>
+            <MenuItem onClick={() => navigate(`/dashboard/profile/${idUser.id}`)}>Profile</MenuItem>
+            <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
             <Typography variant="h6" sx={{ mb: 2 }}>
                 Settings
             </Typography>
@@ -94,10 +110,8 @@ export default function CustomDrawer() {
                     </Box>
                 </Grid>
 
-                {/* Add more settings options here */}
                 <Divider sx={{ width: "100%", my: 2 }} />
 
-                    {/* Example Layout Options */}
                 <Grid item xs={6}>
                     <Box display="flex" flexDirection="column" alignItems="center">
                         <Button variant="outlined">Apparent</Button>
@@ -110,7 +124,6 @@ export default function CustomDrawer() {
                 </Grid>
             </Grid>
 
-            {/* Preset COLORS */}
             <Divider sx={{ width: "100%", my: 2 }} />
             <Typography variant="body2" sx={{ mb: 1 }}>
                 Presets
@@ -137,7 +150,7 @@ export default function CustomDrawer() {
             <CssBaseline />
             <Box sx={{ p: 2 }} dir={rightToLeft ? "rtl" : "ltr"}>
                 <IconButton onClick={toggleDrawer(true)}>
-                    <SettingsIcon />
+                    <icono.iconoAccountCircle />
                 </IconButton>
                 <Drawer
                     anchor={rightToLeft ? "left" : "right"}

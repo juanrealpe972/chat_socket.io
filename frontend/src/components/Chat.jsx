@@ -2,11 +2,6 @@ import io from "socket.io-client";
 import { useState, useEffect } from "react";
 
 const socket = io("/");
-//,{
-//   auth: {
-//     serverOffset: 0
-//   }
-// }
 function Chat() {
     let [message, setMessage] = useState("");
     const [messageError, setMessageError] = useState(null);

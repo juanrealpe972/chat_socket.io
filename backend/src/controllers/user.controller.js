@@ -109,8 +109,8 @@ export const updateUser = async (req, res) => {
 export const getUser = async (req, res) => {
   try {
     const id = req.params.id;
-    let sql = `SELECT * FROM users WHERE id = '${id}'`;
-    const [user] = await pool.query(sql);
+    let sql = `SELECT * FROM users WHERE id = ?`;
+    const [user] = await pool.query(sql, [id]);
     if (user.length > 0) {
       res.status(200).json({ message: "Usuario encontrado con exito", data: user[0] });
     } else {

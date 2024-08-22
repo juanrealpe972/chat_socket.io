@@ -28,7 +28,7 @@ const DatesProfile = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      setUploadedImage(response.data.imageUrl); // Assuming your server returns the image URL
+      setUploadedImage(response.data.imageUrl);
     } catch (error) {
       console.error('Error uploading the image', error);
     }
@@ -40,7 +40,6 @@ const DatesProfile = () => {
         backgroundColor: '#0d1117',
         color: '#c9d1d9',
         minHeight: '100vh',
-        padding: 4,
         backgroundImage: `url(${uploadedImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',

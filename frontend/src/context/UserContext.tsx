@@ -2,11 +2,9 @@ import React, { createContext, useState, useContext, ReactNode } from 'react';
 import axios from 'axios';
 
 interface AuthContextType {
-  user: string | null;
+  user: string;
   login: (username: string) => void;
   logout: () => void;
-  open: boolean;
-  setOpen: (state: boolean) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -20,19 +18,18 @@ export const UserContext = () => {
 };
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<string | null>(null);
-  const [open, setOpen] = useState<boolean>(true);
+  const [user, setUser] = useState('');
 
   const login = (username: string) => {
     setUser(username);
   };
 
   const logout = () => {
-    setUser(null);
+    setUser('');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, open, setOpen}}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
