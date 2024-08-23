@@ -4,8 +4,8 @@ import { verificarUserToken } from "../controllers/autenticacionController.js";
 
 const routerUser = Router();
 
-routerUser.get("/users", getUsers);
-routerUser.get("/users/:id", getUser);
+routerUser.get("/users/:id", getUsers);
+routerUser.get("/user/:id", getUser);
 routerUser.post("/users", cargarImagen, createUser);
 routerUser.put("/users/:id_user", verificarUserToken, cargarImagen, updateUser);
 routerUser.delete("/users/:id", verificarUserToken, deleteUser);

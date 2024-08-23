@@ -15,8 +15,11 @@ export const cargarImagen = uploat.single("imagen");
 
 export const getUsers = async (req, res) => {
   try {
-    let sql = `SELECT * FROM users`;
-    const [rows] = await pool.query(sql);
+
+    const id = req.params.id;
+
+    let sql = `SELECT * FROM users WHERE id != ?`;
+    const [rows] = await pool.query(sql, [id]);
     if (rows.length > 0) {
       res.status(200).json({ message: "Los usuarios son: ", data: rows });
     } else {

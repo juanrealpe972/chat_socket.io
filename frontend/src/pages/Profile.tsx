@@ -13,6 +13,10 @@ const Profile: React.FC = () => {
     const [user, setUser] = useState<{ username: string, imagen : string, correo: string } | null>(null);
     const [value, setValue] = useState('1');
 
+    useEffect(() => {
+        document.title = 'La RED - Profile';
+    }, []);
+
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
     };
@@ -20,7 +24,7 @@ const Profile: React.FC = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/v1/users/${id}`);
+                const response = await axios.get(`http://localhost:3000/v1/user/${id}`);
                 setUser(response.data.data);
             } catch (error) {
                 console.error('Error fetching user data:', error);

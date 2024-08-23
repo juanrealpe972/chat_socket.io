@@ -24,6 +24,10 @@ export default function Register() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const navigation = useNavigate();
 
+  useEffect(() => {
+    document.title = 'La RED - register';
+  }, []);
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {

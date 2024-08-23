@@ -25,9 +25,13 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const { setUserAuth } = UserContext()
+  const { setUserAuth } = UserContext();
 
-  const navigation = useNavigate()
+  const navigation = useNavigate();
+
+  useEffect(() => {
+    document.title = 'La RED - Login';
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

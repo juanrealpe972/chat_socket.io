@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 
 import Header from "./Header";
@@ -6,11 +6,22 @@ import HeaderM from "./HeaderM";
 import { UserContext } from "../context/UserContext";
 
 const AppBar = () => {
-    const auth = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
-    const { userAuth } = UserContext()
+    const { userAuth, setUserAuth } = UserContext();
+    const [auth, setAuth] = useState(false);
+    const [parsedUser, setParsedUser] = useState(null);
 
-    const parsedUser = user ? JSON.parse(user) : null;
+    useEffect(() => {
+        const getDates = () => {
+            const token = localStorage.getItem("token");
+            const user = localStorage.getItem("user");
+            if(token && user) {
+                setUserAuth(true)
+            }
+            setAuth(!!token); 
+            setParsedUser(user ? JSON.parse(user) : null);
+        };
+        getDates();
+    }, []);
 
     return auth && parsedUser && userAuth ? (
         <div className="h-screen bg-[#efefef]">

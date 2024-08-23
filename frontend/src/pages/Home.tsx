@@ -1,9 +1,12 @@
-import { Button } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Home() {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        document.title = 'LA RED';
+    }, []);
 
     return (
         <div className="flex items-center justify-center h-full bg-gradient-to-r from-blue-500 to-purple-600">

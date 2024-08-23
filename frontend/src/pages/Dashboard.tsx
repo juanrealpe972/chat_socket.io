@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container, Typography, Paper, Grid, Button } from '@mui/material';
 
 function Dashboard() {
+
+    useEffect(() => {
+        document.title = 'La RED - Dasboard';
+    }, []);
+
     return (
         <Container maxWidth="lg" sx={{ mt:5, px:2, minWidth: '320px' }}>
             <Paper elevation={3} sx={{ p: 4, borderRadius: 2, width: '100%', maxWidth: '1200px' }}>

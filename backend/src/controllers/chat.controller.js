@@ -12,11 +12,9 @@ export const getMessages = async (req, res) => {
     const [rows] = await pool.query(sql, [chat_id]);
     try {
         if(rows.length > 0) {
-            res.status(200).json(rows);
-        } else if( rows.length === 0) {
-            res.status(404).json({ message: 'No se encontraron mensajes.' });
+            res.status(200).json({data: rows});
         }else {
-            res.status(500).json({ message: 'Error al traer los datos.' });
+            res.status(200).json({ message: 'No se encontraron mensajes.' });
         }
     } catch (error) {
         res.status(500).json('Error en el servidor: ', error);

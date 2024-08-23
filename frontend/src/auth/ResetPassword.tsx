@@ -14,6 +14,10 @@ import CustomDrawer from "../themes/CustomDrawer";
 export default function ResetPassword() {
     const defaultTheme = createTheme();
 
+    React.useEffect(() => {
+        document.title = 'La RED - Reset Password';
+    }, []);
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
