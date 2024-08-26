@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Avatar, Box, Breadcrumbs, CssBaseline, Grid, Link, Tab, Tabs, Typography } from '@mui/material';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import axios from 'axios';
 import { icono } from '../components/IconsAtom';
@@ -12,6 +12,7 @@ const Profile: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [user, setUser] = useState<{ username: string, imagen : string, correo: string } | null>(null);
     const [value, setValue] = useState('1');
+    const navigate = useNavigate()
 
     useEffect(() => {
         document.title = 'La RED - Profile';
@@ -39,10 +40,10 @@ const Profile: React.FC = () => {
             <CssBaseline />
             <h2 className='text-3xl'>Profile</h2>
             <Breadcrumbs separator=">" aria-label="breadcrumb">
-                <Link underline="hover" color="inherit" href="/dashboard">
+                <Link underline="hover" color="inherit" className='cursor-pointer' onClick={() => navigate('/dashboard')}>
                     Dashboard
                 </Link>
-                <Link underline="hover" color="inherit" href={`/dashboard/profile/${id}`}>
+                <Link underline="hover" color="inherit" className='cursor-pointer' onClick={() => navigate(`/dashboard/profile/${id}`)}>
                     User
                 </Link>
                 <Typography color="text.primary" className='cursor-default'>{user?.username || 'Loading...'}</Typography>

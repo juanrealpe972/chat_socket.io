@@ -46,6 +46,10 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import ChatIcon from '@mui/icons-material/Chat';
+import FlipRoundedIcon from '@mui/icons-material/FlipRounded';
+import ChromeReaderModeRoundedIcon from '@mui/icons-material/ChromeReaderModeRounded';
+import ChromeReaderModeTwoToneIcon from '@mui/icons-material/ChromeReaderModeTwoTone';
+import AutoAwesomeMosaicTwoToneIcon from '@mui/icons-material/AutoAwesomeMosaicTwoTone';
 
 export const icono = {
   iconoVere: LiaMapMarkedAltSolid,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { icono } from './IconsAtom';
+import ChatIcon from './icons/ChatIcon';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -14,7 +14,7 @@ const Header = () => {
             <Toolbar>
                 <Grid container alignItems="center">
                     <Grid item xs={6} sm={4} display="flex" alignItems="center">
-                        <icono.iconoChat 
+                        <ChatIcon 
                             sx={{ fontSize: 35, color: 'primary.main', cursor: 'pointer' }} 
                             onClick={() => navigate('/dashboard')} 
                         />

@@ -29,6 +29,7 @@ function ChatPage() {
     const [chatId, setChatId] = useState<number | null>(null);
     const userData = localStorage.getItem('user');
     const parsedUserData = userData ? JSON.parse(userData) : null;
+    const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -105,8 +106,14 @@ function ChatPage() {
         }
     }, [messages]);
 
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            handleSendMessage();
+        }
+    };
+
     const handleSendMessage = () => {
-        if (chatId) {
+        if (chatId && message !== "") {
             axios.post(`http://localhost:3000/v1/${chatId}/messages`, { sender_id: parsedUserData.id, message: message }).then(response => {
                 const newMessage = {
                     id: response.data.id,
@@ -114,7 +121,7 @@ function ChatPage() {
                     message: message,
                     sent_at: new Date().toISOString()
                 };
-                setMessages(prevMessages => [...prevMessages, newMessage]);
+                setMessages(prevMessages => Array.isArray(prevMessages) ? [...prevMessages, newMessage] : [newMessage]);
                 setMessage('');
             })
             .catch(error => {
@@ -123,42 +130,75 @@ function ChatPage() {
         }
     };
 
+    const filteredUsers = users.filter(user => user.username.toLowerCase().includes(searchTerm.toLowerCase()));
+
     return (
-        <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} height="485px">
-            <Paper elevation={3} sx={{ width: { xs: '100%', md: '300px' }, bgcolor: '#1E1E2D', color: '#FFF', padding: '16px' }}>
-                <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+        <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} minWidth="320px" style={{ height: 'calc(100vh - 120px)' }} >
+            <Paper elevation={3} sx={{ width: { xs: '100%', md: '300px' }, bgcolor: '#2F4550', color: '#FFF', display: 'flex', flexDirection: 'column', height: { xs: '100vh', md: 'auto' } }}>
+                <Box display="flex" justifyContent="space-between" alignItems="center" padding={1} paddingX={3}>
                     <Typography variant="h6" gutterBottom>
                         Chat
                     </Typography>
-                    <IconButton href={`/dashboard/profile/${parsedUserData.id}`}>
+                    <IconButton onClick={() => userProfile(parsedUserData)}>
                         <Avatar src={`http://localhost:3000/users/${parsedUserData.imagen}`} alt="Your Profile" />
                     </IconButton>
                 </Box>
-                {users.length > 0 && (
-                    <List>
-                        {users.map(user => (
-                            <ListItem 
-                                key={user.id} 
-                                onClick={() => handleUserClick(user)} 
-                                sx={{bgcolor: selectedUser?.id === user.id ? '#3a3a5c' : '#2F4550', borderRadius: '2px', cursor: "pointer", '&:hover': { bgcolor: '#3a3a5d' }}}
-                            >
-                                <ListItemAvatar>
-                                    <Avatar src={user.imagen ? `http://localhost:3000/users/${user.imagen}` : undefined} alt={user.username} />
-                                </ListItemAvatar>
-                                <ListItemText primary={user.username} />
-                            </ListItem>
-                        ))}
-                    </List>
+                <Box paddingX={3}>
+                    <TextField
+                        fullWidth
+                        placeholder="Buscar usuarios..."
+                        variant="outlined"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        sx={{
+                            '& .MuiInputBase-input': { padding: '10px 10px', fontSize: '14px', color: '#FFF' },
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': { borderColor: '#E0E0E0' },
+                                '&:hover fieldset': { borderColor: '#4A90E2' },
+                            },
+                            '&:hover': {
+                                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+                            },
+                        }}
+                    />
+                </Box>
+                {filteredUsers.length > 0 && (
+                    <Box sx={{ overflowY: 'auto', maxHeight: '300px', scrollBehavior: 'smooth', padding: '1px',
+                        '&::-webkit-scrollbar': { width: '8px' },
+                        '&::-webkit-scrollbar-thumb': { backgroundColor: '#888', borderRadius: '10px' },
+                        '&::-webkit-scrollbar-thumb:hover': { backgroundColor: '#555' },
+                        '&::-webkit-scrollbar-track': { backgroundColor: '#f1f1f1' },
+                    }}>
+                        <List>
+                            {filteredUsers.map(user => (
+                                <ListItem 
+                                    key={user.id} 
+                                    onClick={() => handleUserClick(user)} 
+                                    sx={{
+                                        bgcolor: selectedUser?.id === user.id ? '#5C7F96' : "transparent",
+                                        borderRadius: '2px',
+                                        cursor: "pointer",
+                                        transition: 'background-color 0.3s ease',
+                                        '&:hover': { bgcolor: '#5C7F96' },
+                                    }}
+                                >
+                                    <ListItemAvatar>
+                                        <Avatar src={user.imagen ? `http://localhost:3000/users/${user.imagen}` : undefined} alt={user.username} />
+                                    </ListItemAvatar>
+                                    <ListItemText primary={user.username} />
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Box>
                 )}
             </Paper>
-
-            <Box flex={1} display="flex" flexDirection="column" bgcolor="#2D2D44">
+            <Box flex={1} display="flex" flexDirection="column" bgcolor="#2D2D44" height="100%">
                 {selectedUser ? (
                     <>
-                        <Box display="flex" justifyContent="space-between" alignItems="center" bgcolor="#2F4550" padding="10px">
+                        <Box display="flex" justifyContent="space-between" alignItems="center" bgcolor="#5C7F96" padding="10px">
                             <Box display="flex" alignItems="center">
                                 <Avatar src={`http://localhost:3000/users/${selectedUser.imagen}`} alt={selectedUser.username} />
-                                <Typography variant="h6" sx={{ color: '#FFF', ml: 2 }}>
+                                <Typography variant="h6" sx={{ color: '#000', ml: 2 }}>
                                     {selectedUser.username}
                                 </Typography>
                             </Box>
@@ -167,63 +207,73 @@ function ChatPage() {
                             </IconButton>
                             <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
                                 <MenuItem onClick={() => userProfile(selectedUser)}>Ver perfil</MenuItem>
-                                {/* <MenuItem onClick={handleMenuClose}>Contactar por WhatsApp</MenuItem> */}
                             </Menu>
                         </Box>
-                        <Box flex={1} display="flex" flexDirection="column" justifyContent="space-between" bgcolor="black" height="1px">
-                            <Box flex={1}
-                                sx={{ overflowY: 'auto', padding: '20px', scrollBehavior: 'smooth',
-                                    '&::-webkit-scrollbar': { width: '8px' },
-                                    '&::-webkit-scrollbar-thumb': { backgroundColor: '#888', borderRadius: '10px' },
-                                    '&::-webkit-scrollbar-thumb:hover': { backgroundColor: '#555' },
-                                    '&::-webkit-scrollbar-track': { backgroundColor: '#f1f1f1' },
-                                }}
-                            >
-                                {messages ? messages.map((msg, index) => (
-                                    <Box key={index} display="flex" justifyContent={msg.username === parsedUserData.username ? 'flex-end' : 'flex-start'} mb={1}>
-                                        <Box
-                                            sx={{
-                                                maxWidth: '70%',
-                                                bgcolor: msg.username === parsedUserData.username ? '#2F4550' : '#4A90E2',
-                                                color: '#FFF',
-                                                padding: '10px',
-                                                borderRadius: '10px',
-                                                textAlign: 'left',
-                                                alignSelf: 'flex-start'
-                                            }}
-                                        >
-                                            <Typography variant="body2">{msg.message}</Typography>
-                                            <Typography variant="caption" sx={{ display: 'block', textAlign: msg.username === parsedUserData.username ? 'right' : 'left', color: '#BBB' }}>
-                                                {new Date(msg.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                            </Typography>
+                        <Box flex={1} display="flex" flexDirection="column" justifyContent="space-between"
+                            sx={{
+                                background: 'linear-gradient(90deg, transparent 49%, #444 50%, transparent 51%), linear-gradient(transparent 49%, #444 50%, transparent 51%), #000',
+                                // background: 'linear-gradient(90deg, transparent 49%, #000 50%, transparent 51%), linear-gradient(transparent 49%, #000 50%, transparent 51%), #FFF',
+                                backgroundSize: '55px 55px',
+                                minHeight: { xs: '70vh', md: '60vh' },
+                                maxHeight: { xs: '70vh', md: '80vh' },
+                                height: { xs: 'auto', md: '80%' }, 
+                            }}
+                        >
+                            <Box flex={1} sx={{ overflowY: 'auto', padding: '20px', scrollBehavior: 'smooth',
+                                '&::-webkit-scrollbar': { width: '8px' },
+                                '&::-webkit-scrollbar-thumb': { backgroundColor: '#888', borderRadius: '10px' },
+                                '&::-webkit-scrollbar-thumb:hover': { backgroundColor: '#555' },
+                                '&::-webkit-scrollbar-track': { backgroundColor: '#f1f1f1' },
+                            }}>
+                                {messages ? (
+                                    messages.map((msg, index) => (
+                                        <Box key={index} display="flex" justifyContent={msg.username === parsedUserData.username ? 'flex-end' : 'flex-start'} mb={1} >
+                                            <Box
+                                                sx={{ maxWidth: '70%', bgcolor: msg.username === parsedUserData.username ? '#5C7F96' : '#2F4550', 
+                                                    color: '#FFF', padding: '10px', borderRadius: '10px', textAlign: 'left', alignSelf: 'flex-start', 
+                                                }}
+                                            >
+                                                <Typography variant="body2">{msg.message}</Typography>
+                                                <Typography variant="caption" sx={{display: 'block',textAlign: msg.username === parsedUserData.username ? 'right' : 'left',color: '#BBB'}} >
+                                                    {new Date(msg.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })}
+                                                </Typography>
+                                            </Box>
                                         </Box>
-                                    </Box>
-                                )) : (
-                                    ""
+                                    ))
+                                ) : (
+                                ''
                                 )}
+                                <div ref={messagesEndRef} />
                             </Box>
-                            <Box display="flex" alignItems="center" bgcolor="#2F4550" height={60} paddingX={2}>
+                            <Box display="flex" alignItems="center" bgcolor="#5C7F96" height={60} paddingX={2} >
                                 <TextField
                                     placeholder={`Escribe un mensaje a ${selectedUser.username}`}
                                     value={message}
+                                    onKeyPress={handleKeyPress}
                                     onChange={(e) => setMessage(e.target.value)}
-                                    sx={{ bgcolor: '#FFF', borderRadius: 1, flexGrow: 1, mr: 1,
-                                        '& .MuiInputBase-input': { padding: '10px 10px', fontSize: '14px', },
+                                    sx={{
+                                        bgcolor: '#FFF',
+                                        borderRadius: 1,
+                                        flexGrow: 1,
+                                        mr: 1,
+                                        '& .MuiInputBase-input': { padding: '10px 10px', fontSize: '14px' },
                                         '& .MuiOutlinedInput-root': {
-                                            '& fieldset': { borderColor: '#E0E0E0',  },
-                                            '&:hover fieldset': { borderColor: '#4A90E2',  },
+                                        '& fieldset': { borderColor: '#E0E0E0' },
+                                        '&:hover fieldset': { borderColor: '#4A90E2' },
                                         },
-                                        '&:hover': { bgcolor: '#F5F5F5',  boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', },
+                                        '&:hover': {
+                                        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+                                        },
                                     }}
                                 />
-                                <IconButton onClick={handleSendMessage} color="primary">
+                                <IconButton onClick={handleSendMessage}>
                                     <SendIcon />
                                 </IconButton>
                             </Box>
                         </Box>
                     </>
                 ) : (
-                    <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+                    <Box display="flex" justifyContent="center" alignItems="center" bgcolor="#5C7F96" height="100%">
                         <Typography variant="h6" sx={{ color: '#FFF' }}>
                             Selecciona un usuario para empezar a chatear.
                         </Typography>

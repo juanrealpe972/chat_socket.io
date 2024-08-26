@@ -12,11 +12,14 @@ import { useNavigate } from "react-router-dom";
 import { icono } from "./IconsAtom"
 import CustomDrawer from "../themes/CustomDrawer";
 import { Grid } from "@mui/material";
+import ChatIcon from "./icons/ChatIcon";
+import { UserContext } from "../context/UserContext";
 
 export default function HeaderM() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate();
+  const {selectedColor} = UserContext();
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -46,18 +49,6 @@ export default function HeaderM() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <Grid item xs={12} sm={6}>
-        <icono.iconoChat sx={{ fontSize: 35, color: 'primary.main' }}  />
-      </Grid>
-      <Typography
-        variant="h6"
-        noWrap
-        className="text-[#071013] pl-2"
-        component="div"
-        sx={{ display: { xs: "none", sm: "block" } }}
-      >
-        RED
-      </Typography>
       <MenuItem onClick={miChat}>
         <IconButton size="large" aria-label="show 4 new mails" className="text-[#071013]">
         <Badge badgeContent={4} color="error">
@@ -96,9 +87,9 @@ export default function HeaderM() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" elevation={1}>
-        <Toolbar className="bg-white">
+        <Toolbar className="bg-white" style={{ display: "flex", justifyContent:"center" }}>
           <Grid item xs={12} sm={6}>
-            <icono.iconoChat sx={{ fontSize: 35, color: 'primary.main', cursor: "pointer" }} onClick={() => navigate('/dashboard')} />
+            <ChatIcon color={selectedColor} className="cursor-pointer -mt-2" onClick={() => navigate('/dashboard')} />
           </Grid>
           <Typography
             variant="h6"
@@ -106,7 +97,7 @@ export default function HeaderM() {
             className="text-[#071013] pl-2"
             component="div"
             onClick={() => navigate('/dashboard')}
-            sx={{ display: { xs: "none", sm: "block", cursor: "pointer" } }}
+            sx={{ display: { cursor: "pointer" } }}
           >
             RED
           </Typography>

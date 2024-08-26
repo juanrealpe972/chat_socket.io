@@ -14,17 +14,17 @@ import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import FormatTextdirectionRToLIcon from "@mui/icons-material/FormatTextdirectionRToL";
 import COLORS from "./colors.json";
-import { icono } from "../components/IconsAtom"
 import { useNavigate } from "react-router-dom";
+import { icono } from "../components/IconsAtom"; // Asegúrate de importar el icono
 import { UserContext } from "../context/UserContext";
 
 export default function CustomDrawer() {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [darkMode, setDarkMode] = useState(false);
     const [rightToLeft, setRightToLeft] = useState(false);
-    const idUser = JSON.parse(localStorage.getItem('user') || '0')
+    const idUser = JSON.parse(localStorage.getItem('user') || '0');
     const navigate = useNavigate();
-    const { setUserAuth } = UserContext();
+    const { selectedColor, setSelectedColor } = UserContext()
 
     const toggleDrawer = (open: boolean) => () => {
         setDrawerOpen(open);
@@ -36,6 +36,21 @@ export default function CustomDrawer() {
 
     const handleDirectionChange = () => {
         setRightToLeft(!rightToLeft);
+    };
+
+    const handleLogout = async () => {
+        try {
+            localStorage.clear();
+            navigate('/');
+            setDrawerOpen(false); // Cerrar el drawer después de logout
+        } catch (error) {
+            console.error('Error logging out', error);
+        }
+    };
+
+    const handleColorSelect = (color: string) => {
+        setSelectedColor(color);
+        setDrawerOpen(false); // Cerrar el drawer después de seleccionar el color
     };
 
     const theme = createTheme({
@@ -58,22 +73,12 @@ export default function CustomDrawer() {
             },
             text: {
                 primary: darkMode
-                ? COLORS.palette.common.white
-                : COLORS.palette.grey[900],
+                    ? COLORS.palette.common.white
+                    : COLORS.palette.grey[900],
             },
         },
         direction: rightToLeft ? "rtl" : "ltr",
     });
-
-    const handleLogout = async () => {
-        try {
-            localStorage.clear();
-            navigate('/'); 
-            setUserAuth(false)
-        } catch (error) {
-            console.error('Error logging out', error);
-        }
-    };
 
     const drawerContent = (
         <Box sx={{ width: 300, padding: 2 }}>
@@ -86,7 +91,7 @@ export default function CustomDrawer() {
                 <Grid item xs={6}>
                     <Box display="flex" flexDirection="column" alignItems="center">
                         <FormControlLabel
-                            control={ <Switch checked={darkMode} onChange={handleThemeChange} /> }
+                            control={<Switch checked={darkMode} onChange={handleThemeChange} />}
                             label="Modo oscuro"
                         />
                         <Brightness4Icon />
@@ -95,12 +100,7 @@ export default function CustomDrawer() {
                 <Grid item xs={6}>
                     <Box display="flex" flexDirection="column" alignItems="center">
                         <FormControlLabel
-                            control={
-                                <Switch
-                                checked={rightToLeft}
-                                onChange={handleDirectionChange}
-                                />
-                            }
+                            control={<Switch checked={rightToLeft} onChange={handleDirectionChange} />}
                             label="Cambiar dirección de menú"
                         />
                         <FormatTextdirectionRToLIcon />
@@ -114,16 +114,36 @@ export default function CustomDrawer() {
             </Typography>
             <Grid container spacing={1}>
                 <Grid item xs={3}>
-                    <Box bgcolor={COLORS.palette.primary.main} height={40} />
+                    <Box
+                        bgcolor={COLORS.palette.primary.main}
+                        height={40}
+                        onClick={() => handleColorSelect(COLORS.palette.primary.main)}
+                        sx={{ cursor: 'pointer' }}
+                    />
                 </Grid>
                 <Grid item xs={3}>
-                    <Box bgcolor={COLORS.palette.secondary.main} height={40} />
+                    <Box
+                        bgcolor={COLORS.palette.secondary.main}
+                        height={40}
+                        onClick={() => handleColorSelect(COLORS.palette.secondary.main)}
+                        sx={{ cursor: 'pointer' }}
+                    />
                 </Grid>
                 <Grid item xs={3}>
-                    <Box bgcolor={COLORS.palette.success.main} height={40} />
+                    <Box
+                        bgcolor={COLORS.palette.success.main}
+                        height={40}
+                        onClick={() => handleColorSelect(COLORS.palette.success.main)}
+                        sx={{ cursor: 'pointer' }}
+                    />
                 </Grid>
                 <Grid item xs={3}>
-                    <Box bgcolor={COLORS.palette.warning.main} height={40} />
+                    <Box
+                        bgcolor={COLORS.palette.warning.main}
+                        height={40}
+                        onClick={() => handleColorSelect(COLORS.palette.warning.main)}
+                        sx={{ cursor: 'pointer' }}
+                    />
                 </Grid>
             </Grid>
         </Box>
