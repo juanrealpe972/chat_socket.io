@@ -134,7 +134,7 @@ function ChatPage() {
 
     return (
         <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} minWidth="320px" style={{ height: 'calc(100vh - 120px)' }} >
-            <Paper elevation={3} sx={{ width: { xs: '100%', md: '300px' }, bgcolor: '#2F4550', color: '#FFF', display: 'flex', flexDirection: 'column', height: { xs: '100vh', md: 'auto' } }}>
+            <Paper elevation={3} sx={{ width: { xs: '100%', md: '300px' }, bgcolor: '#0D1B1E', color: '#FFF', display: 'flex', flexDirection: 'column', height: { xs: '100vh', md: 'auto' } }}>
                 <Box display="flex" justifyContent="space-between" alignItems="center" padding={1} paddingX={3}>
                     <Typography variant="h6" gutterBottom>
                         Chat
@@ -153,7 +153,7 @@ function ChatPage() {
                         sx={{
                             '& .MuiInputBase-input': { padding: '10px 10px', fontSize: '14px', color: '#FFF' },
                             '& .MuiOutlinedInput-root': {
-                                '& fieldset': { borderColor: '#E0E0E0' },
+                                '& fieldset': { borderColor: '#7798AB' },
                                 '&:hover fieldset': { borderColor: '#4A90E2' },
                             },
                             '&:hover': {
@@ -258,7 +258,7 @@ function ChatPage() {
                                         mr: 1,
                                         '& .MuiInputBase-input': { padding: '10px 10px', fontSize: '14px' },
                                         '& .MuiOutlinedInput-root': {
-                                        '& fieldset': { borderColor: '#E0E0E0' },
+                                        '& fieldset': { borderColor: '#7798AB' },
                                         '&:hover fieldset': { borderColor: '#4A90E2' },
                                         },
                                         '&:hover': {
