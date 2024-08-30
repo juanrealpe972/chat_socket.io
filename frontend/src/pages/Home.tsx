@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Box, Button, Container, Typography } from '@mui/material';
 
 function Home() {
     const navigate = useNavigate();
@@ -9,17 +10,26 @@ function Home() {
     }, []);
 
     return (
-        <div className="flex items-center justify-center h-full bg-gradient-to-r from-blue-500 to-purple-600">
-            <div className="bg-white shadow-lg rounded-lg p-8 max-w-lg text-center">
-                <h1 className="text-4xl font-bold text-gray-800 mb-4">¡Bienvenido a la RED!</h1>
-                <p className="text-gray-600 mb-6">
-                    Conéctate, comparte y colabora con otros usuarios. ¡Explora lo que tenemos para ofrecer!
-                </p>
-                <button onClick={() => navigate('/login')} className="bg-blue-500 text-white font-semibold py-2 px-6 rounded-full hover:bg-blue-600 transition duration-300">
-                    Empezar
-                </button>
-            </div>
-        </div>
+        <Box display="flex" justifyContent="center" alignItems="center" height="89vh"
+            sx={{ background: 'linear-gradient(to right, #3b82f6, #8b5cf6)' }}
+        >
+            <Container maxWidth="sm">
+                <Box sx={{ bgcolor: 'white', boxShadow: 3, borderRadius: 2, p: 3, textAlign: 'center' }}>
+                    <Typography variant="h4" fontWeight="bold" color="text.primary" gutterBottom>
+                        ¡Bienvenido a la RED!
+                    </Typography>
+                    <Typography variant="body1" color="text.secondary" paragraph>
+                        Conéctate, comparte y colabora con otros usuarios.
+                    </Typography>
+                    <Button 
+                        variant="contained" color="info" onClick={() => navigate('/login')}
+                        sx={{ py: 1, px: 4, textTransform: 'none' }}
+                    >
+                        Empezar
+                    </Button>
+                </Box>
+            </Container>
+        </Box>
     );
 }
 

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 
 import Header from "./Header";
-import HeaderM from "./HeaderM";
 import { UserContext } from "../context/UserContext";
 
 const AppBar = () => {
@@ -25,7 +24,7 @@ const AppBar = () => {
 
     return auth && parsedUser && userAuth ? (
         <div className="h-screen bg-[#efefef]">
-            <HeaderM />
+            <Header />
             <div className="p-6">
                 <Outlet />
             </div>

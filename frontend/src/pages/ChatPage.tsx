@@ -173,7 +173,7 @@ function ChatPage() {
                             {filteredUsers.map(user => (
                                 <ListItem 
                                     key={user.id} 
-                                    onClick={() => handleUserClick(user)} 
+                                    onClick={() => handleUserClick(user)}
                                     sx={{
                                         bgcolor: selectedUser?.id === user.id ? '#5C7F96' : "transparent",
                                         borderRadius: '2px',

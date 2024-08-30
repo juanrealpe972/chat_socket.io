@@ -37,7 +37,7 @@ export default function Login() {
     event.preventDefault();
     setLoading(true);
     setError('');
-  
+
     try {
       if (correo === "" && password === "") {
         setError("Por favor llena todos los campos.");
@@ -95,7 +95,7 @@ export default function Login() {
         />
         <Grid className='flex' item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <Box className="flex mx-8 flex-col justify-center items-center">
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -153,9 +153,11 @@ export default function Login() {
               >
                 {loading ? 'Cargando...' : 'Iniciar sesión'}
               </Button>
-              <Link href="/reset" variant="body2" sx={{ display: 'block', textAlign: 'center' }}>
-                ¿Has olvidado la contraseña?
-              </Link>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Link href="/reset" variant="body2" sx={{ textAlign: "center", }} >
+                  ¿Has olvidado la contraseña?
+                </Link>
+              </Box>
               <Card sx={{ minWidth: 275, mt: 2 }} variant="outlined">
                 <CardContent>
                   <Grid container className='justify-between items-center'>
